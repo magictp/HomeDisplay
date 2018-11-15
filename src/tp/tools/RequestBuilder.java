@@ -30,7 +30,7 @@ public class RequestBuilder {
         HttpEntity entity = response.getEntity();
 
 		if (entity != null) {
-			resp = IOUtils.toString(entity.getContent(), "ASCII");
+			resp = IOUtils.toString(entity.getContent(), "UTF8");
 		}
 		
 		return resp;
@@ -46,7 +46,7 @@ public class RequestBuilder {
        HttpEntity entity = response.getEntity();
 
 		if (entity != null) {
-			resp = IOUtils.toString(entity.getContent(), "ASCII");
+			resp = IOUtils.toString(entity.getContent(), "UTF8");
 		}
 		
 		return resp;
