@@ -114,7 +114,7 @@ public class MainForm {
 
 	public void init() {
 		new MainForm().CreateJFrame(); // 调用CreateJFrame()方法
-		
+		updateInfo();
 		new Timer(10000,taskPerformer).start();
 	}
 	
@@ -127,20 +127,28 @@ public class MainForm {
 	ActionListener taskPerformer = new ActionListener(){
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			a++;
-			busLabel.setText(new MainFormController().getOncomingMetro());
-			busLabel.paintImmediately(busLabel.getVisibleRect());
-			newsLabel.setText(String.valueOf(a));
-			newsLabel.paintImmediately(newsLabel.getVisibleRect());
-//			try {
-//				weatherLabel.setText(new MainFormController().getWeatherForecast());
-//			} catch (Exception e1) {
-//				// TODO 自動生成された catch ブロック
-//				e1.printStackTrace();
-//			}
-			weatherLabel.paintImmediately(weatherLabel.getVisibleRect());
+			updateInfo();
 		}
 	};
+	
+	private void updateInfo()
+	{
+		a++;
+		busLabel.setText(new MainFormController().getOncomingMetro());
+		busLabel.paintImmediately(busLabel.getVisibleRect());
+		newsLabel.setText(String.valueOf(a));
+		newsLabel.paintImmediately(newsLabel.getVisibleRect());
+		if(a/10 ==0)
+		{
+			try {
+				weatherLabel.setText(new MainFormController().getWeatherForecast());
+				weatherLabel.paintImmediately(weatherLabel.getVisibleRect());
+			} catch (Exception e1) {
+				// TODO 自動生成された catch ブロック
+				e1.printStackTrace();
+			}
+		}	
+	}
 	
 
 }
