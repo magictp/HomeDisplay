@@ -11,7 +11,7 @@ import javax.swing.*;
 import tp.homeDisplay.controller.MainFormController;
 
 public class MainForm {
-	
+
 	private static final int border = 1;
 	static JLabel busLabel = new JLabel();
 	static JLabel weatherLabel = new JLabel();
@@ -19,7 +19,9 @@ public class MainForm {
 	static JLabel newsLabel = new JLabel();
 	static JLabel clockLabel = new JLabel();
 	static JLabel photoLabel = new JLabel();
-	int a = 0;
+	String newsString = "";
+	boolean isNewsUpdated = false;
+
 	public void CreateJFrame() {
 		JFrame jf = new JFrame("这是一个JFrame窗体"); // 实例化一个JFrame对象
 		jf.setVisible(true); // 设置窗体可视
@@ -39,20 +41,17 @@ public class MainForm {
 		busLabel.setText("this is bus information!");
 
 		weatherLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE, border));
-		weatherLabel.setText("this is weather information!\nAKUNAMATATA");
+		weatherLabel.setText("this is weather information!");
 
 		memoLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE, border));
 		memoLabel.setText("this is memo information!");
 
-		
 		newsLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE, border));
 		newsLabel.setText("this is news information!");
 
-		
 		clockLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE, border));
 		clockLabel.setText("this is clock information!");
 
-		
 		photoLabel.setBorder(BorderFactory.createLineBorder(Color.BLUE, border));
 		photoLabel.setText("this is photo information!");
 
@@ -115,40 +114,61 @@ public class MainForm {
 	public void init() {
 		new MainForm().CreateJFrame(); // 调用CreateJFrame()方法
 		updateInfo();
-		new Timer(10000,taskPerformer).start();
+		new Timer(10000, taskPerformer).start();
+		Thread newsScroll = new Thread() {
+			public void run() {
+				int i = 0;
+				try {
+					while (true) {
+						if (i >= newsString.length()) {
+							i = 0;
+						}
+						if (isNewsUpdated) {
+							i = 0;
+							isNewsUpdated = false;
+						}
+						newsLabel.setText(newsString.substring(i, newsString.length()));
+						newsLabel.paintImmediately(newsLabel.getVisibleRect());
+						if (i == 0) {
+							i++;
+							Thread.sleep(1000);
+						} else if (i < newsString.length()) {
+							i++;
+							Thread.sleep(300);
+						}
+					}
+				} catch (Exception e1) {
+					// TODO 自動生成された catch ブロック
+					e1.printStackTrace();
+				}
+			}
+		};
+		newsScroll.start();
 	}
-	
+
 	public static void main(String[] args) {
 		// TODO 自動生成されたメソッド・スタブ
 		new MainForm().init();
 	}
 
-	
-	ActionListener taskPerformer = new ActionListener(){
+	ActionListener taskPerformer = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			updateInfo();
 		}
 	};
-	
-	private void updateInfo()
-	{
-		a++;
+
+	private void updateInfo() {
 		busLabel.setText(new MainFormController().getOncomingMetro());
 		busLabel.paintImmediately(busLabel.getVisibleRect());
-		newsLabel.setText(String.valueOf(a));
-		newsLabel.paintImmediately(newsLabel.getVisibleRect());
-		if(a/10 ==0)
-		{
-			try {
-				weatherLabel.setText(new MainFormController().getWeatherForecast());
-				weatherLabel.paintImmediately(weatherLabel.getVisibleRect());
-			} catch (Exception e1) {
-				// TODO 自動生成された catch ブロック
-				e1.printStackTrace();
-			}
-		}	
+		try {
+			newsString = new MainFormController().getLatestNews();
+			isNewsUpdated = true;
+			weatherLabel.setText(new MainFormController().getWeatherForecast());
+			weatherLabel.paintImmediately(weatherLabel.getVisibleRect());
+		} catch (Exception e1) {
+			// TODO 自動生成された catch ブロック
+			e1.printStackTrace();
+		}
 	}
-	
-
 }
