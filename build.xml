@@ -1,0 +1,49 @@
+<project name="HomeDisplay" default="war" basedir=".">
+  <description>
+    simple example build file
+  </description>
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="dist" location="dist"/>
+  <property name="web-app.name" value="WebContent" />
+  <property name="build" location="${web-app.name}/WEB-INF/classes"/>
+	
+	<path id="master-classpath">
+	  <fileset dir="lib">
+	    <include name="*.jar"/>
+	  </fileset>
+	</path>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source">
+    <!-- Compile the Java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}">
+  		<classpath refid="master-classpath"/>
+    </javac>
+  </target>
+
+  <target name="war" depends="compile"
+        description="generate the distribution">
+    <!-- Create the distribution directory -->
+  	<war destfile="${dist}/HomeDisplay.war"
+  	     webxml="${web-app.name}/WEB-INF/web.xml">
+        <classes dir="${web-app.name}/WEB-INF/classes"/>
+        <lib dir="lib"/>
+  	    <fileset dir="${web-app.name}" excludes="**/web.xml" />
+  	</war>
+  </target>
+
+  <target name="clean"
+        description="clean up">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${war}"/>
+  </target>
+</project>

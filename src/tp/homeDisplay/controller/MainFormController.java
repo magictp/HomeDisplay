@@ -3,13 +3,13 @@ package tp.homeDisplay.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-//import tp.homeDisplay.model.Article;
-//import tp.homeDisplay.model.NewsApiQuery;
-//import tp.homeDisplay.model.Weather;
-//import tp.homeDisplay.model.YahooQuery;
+import tp.homeDisplay.model.Article;
+import tp.homeDisplay.model.NewsApiQuery;
+import tp.homeDisplay.model.Weather;
+import tp.homeDisplay.model.YahooQuery;
 import tp.homeDisplay.service.MetroService;
-//import tp.homeDisplay.service.NewsService;
-//import tp.homeDisplay.service.WeatherService;
+import tp.homeDisplay.service.NewsService;
+import tp.homeDisplay.service.WeatherService;
 import com.opensymphony.xwork2.ActionSupport;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
@@ -28,7 +28,7 @@ public class MainFormController extends ActionSupport{
 		inputStream = new ByteArrayInputStream(nextTime.getBytes(StandardCharsets.UTF_8));
 		return SUCCESS;	
 	}
-/*	
+	
 	public String getWeatherForecast() throws Exception{
 		String jsonString = new WeatherService().getWeatherForecast();
 		jsonString = jsonString.substring(9, jsonString.length() -1);
@@ -48,5 +48,5 @@ public class MainFormController extends ActionSupport{
 			newsString += "          ";
 		}
 		return newsString;
-	}*/
+	}
 }
