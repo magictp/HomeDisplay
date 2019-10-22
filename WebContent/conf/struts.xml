@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+	"http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<!-- START SNIPPET: xworkSample -->
+<struts>
+
+	<!-- Some or all of these can be flipped to true for debugging -->
+	<constant name="struts.i18n.reload" value="false" />
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.configuration.xml.reload" value="false" />
+	<constant name="struts.custom.i18n.resources" value="globalMessages" />
+	<constant name="struts.action.extension" value="action" />
+
+	<constant name="struts.convention.result.path" value="/WEB-INF" />
+
+	<constant name="struts.multipart.maxSize" value="209715200" />
+
+	<include file="struts-default.xml" />
+
+
+	<package name="json-default" extends="struts-default">
+
+		<result-types>
+			<result-type name="json" class="org.apache.struts2.json.JSONResult" />
+			<result-type name="jsonActionRedirect"
+				class="org.apache.struts2.json.JSONActionRedirectResult" />
+		</result-types>
+
+		<interceptors>
+			<interceptor name="json"
+				class="org.apache.struts2.json.JSONInterceptor" />
+			<interceptor name="jsonValidation"
+				class="org.apache.struts2.json.JSONValidationInterceptor" />
+
+			<!-- Sample JSON validation stack -->
+			<interceptor-stack name="jsonValidationWorkflowStack">
+				<interceptor-ref name="basicStack" />
+				<interceptor-ref name="validation">
+					<param name="excludeMethods">input,back,cancel</param>
+				</interceptor-ref>
+				<interceptor-ref name="jsonValidation" />
+				<interceptor-ref name="workflow" />
+			</interceptor-stack>
+
+		</interceptors>
+
+	</package>
+
+	<package name="default" extends="json-default">
+		<default-interceptor-ref name="defaultStack" />
+		<action name="getMetroTime" method="getOncomingMetro" class="tp.homeDisplay.controller.MainFormController">
+			<result type="stream">
+				<param name="contentType">text/plain</param>
+			</result>
+		</action>
+	</package>
+</struts>
+
+
